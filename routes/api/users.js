@@ -68,9 +68,7 @@ jwt.sign(payload, config.get('jwtSecret'),
         if(err) throw err;
         res.json({token});
     }
-    )
-
-res.send('User route')
+    );
 }catch(err){
 console.error(err.message);
 res.status(500).send('Server error')
