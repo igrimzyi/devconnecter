@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const request = require('request');
 const auth = require('../../middleware/auth');
-const {check, validationResult } = require('express-validator');
+const {check, validationResult, body } = require('express-validator');
 const Profile = require('../../models/Profile');
 const User = require('../../models/User');
 const { ProfilingLevel } = require('mongodb');
-const c = require('config');
+const config = require('config');
+const { response } = require('express');
 
 router.get('/me',auth ,async(req,res) => {
     try{
@@ -293,8 +295,7 @@ router.delete('/education/:edu_id', auth, async(req,res)=>{
     try{
         const profile = await Profile.findOne({user: req.user.id});
 
-        const removeIndex = profile.education.map(item => item.id).indexOf
-        (req.params.edu_id);
+        const removeIndex = profile.education.map(item => item.id).indexOf(req.params.edu_id);
 
         profile.education.splice(removeIndex, 1);
 
@@ -312,6 +313,30 @@ router.delete('/education/:edu_id', auth, async(req,res)=>{
 
 
 
+
+
+})
+router.get('/github/:username', (req,res)=>{
+    try{
+        const options={
+            uri: `https://api.github.com/users/${req.params.username}/repos?per_page=5&sort=created:asc&cient_id=${config.get('githubClientId')}&client_secret=${config.get('githubSecret')}`,
+            method: 'GET',
+            headers: {'user-agent': 'node.js'}
+        }
+
+        request(options,(error, response, body)=>{
+            if(error) console.error(error);
+
+            if(response.statusCode !== 200){
+               return res.status(404).json({msg: 'No profile found'});
+            }
+
+            res.json(JSON.parse(body))
+        })
+    }catch(err){
+        console.error(err.message)
+        res.status(500).send('Server Error')
+    }
 
 
 })
