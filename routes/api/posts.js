@@ -169,7 +169,7 @@ async(req,res) => {
 
     await post.save();
 
-    const post = await newPost.save();
+    
 
     res.json(post.comments);
     } catch(err){
