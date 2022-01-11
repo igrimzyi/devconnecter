@@ -10,6 +10,11 @@ import './App.css';
 import { Provider } from 'react-redux';
 import store from './store'
 
+if(localStorage.token){
+        setAuthToken(localStorage.token);
+    }
+
+
 const App = () =>
 <Provider store= {store}>
   <Router>
