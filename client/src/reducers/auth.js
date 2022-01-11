@@ -25,8 +25,7 @@ export default function(state = initialState, action) {
             loading: false,
             user: payload
         }
-
-    }
+    };
     switch(type){
         case REGISTER_SUCCESS:
         case LOGIN_SUCCESS:
