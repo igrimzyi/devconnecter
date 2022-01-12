@@ -3,10 +3,11 @@ import React, {Fragment, useState} from 'react';
 import {Link, Navigate} from 'react-router-dom';
 import {connect} from 'react-redux'
 import {setAlert} from '../../actions/alert';
-import {register} from '../../actions/auth'
+import {register} from '../../actions/auth';
 
 
 import PropTypes from 'prop-types';
+import Navbar from '../layout/Navbar';
 
 const Register = ({setAlert, register, isAuthenticated}) => {
     const [formData, setFormData] = useState({
@@ -53,6 +54,10 @@ const Register = ({setAlert, register, isAuthenticated}) => {
 
     }
 
+    if(isAuthenticated){
+        return <Navigate to="/dashboard" />
+    }
+
     return(<Fragment>
     <section className='container'>
              <h1 className="large text-primary">Sign Up</h1>
@@ -63,10 +68,8 @@ const Register = ({setAlert, register, isAuthenticated}) => {
         </div>
         <div className="form-group">
           <input type="email" placeholder="Email Address" name="email" value={email} onChange={e => onChange(e)}/>
-          <small className="form-text"
-            >This site uses Gravatar so if you want a profile image, use a
-            Gravatar email</small
-          >
+          <small className="form-text"> This site uses Gravatar so if you want a profile image, use a
+            Gravatar email</small>
         </div>
         <div className="form-group">
           <input
@@ -110,4 +113,4 @@ const mapStateToProps = state => ({
     register
 });
 
-export default connect(mapStateToProps,null, {setAlert})(Register);
+export default connect(mapStateToProps, {setAlert})(Register);
